@@ -1,0 +1,110 @@
+@font-face {
+  font-family: tubaba-bold;
+  src: url(../font/tubaba-fonts/Tubaba-Bold.ttf);
+}
+@font-face {
+  font-family: tubaba;
+  src: url(../font/tubaba-fonts/Tubaba-Medium.ttf);
+}
+:root {
+  --maroon: #680000;
+  --gold: #ead196;
+}
+
+body {
+  font-family: tubaba;
+}
+
+nav {
+  background-color: var(--maroon);
+}
+nav .navbar-brand img {
+  height: 50px;
+}
+nav .info-docx-text {
+  font-family: tubaba-bold;
+  color: var(--gold);
+}
+
+/* =========== Page Detail Dokumen =========== */
+.page-detail-dokumen .konten .card-pdf {
+  background-color: var(--maroon);
+  border-radius: 0px;
+}
+.page-detail-dokumen .konten .card-pdf .cont-pdf {
+  height: 90vh;
+  width: 100%;
+}
+.page-detail-dokumen .konten a {
+  text-decoration: none;
+}
+.page-detail-dokumen .konten .btn-unduh {
+  border-radius: 0;
+  background-color: var(--maroon);
+  color: var(--gold);
+  display: flex;
+  justify-content: space-between;
+  transition: all 0.5s;
+}
+.page-detail-dokumen .konten .btn-unduh i {
+  transition: all 0.5s;
+}
+.page-detail-dokumen .konten .btn-unduh:hover {
+  background-color: var(--gold);
+  color: var(--maroon);
+}
+.page-detail-dokumen .konten .btn-unduh:hover i {
+  transform: rotate(-30deg);
+}
+.page-detail-dokumen .konten .ket {
+  font-size: medium;
+}
+
+footer {
+  font-size: medium;
+}
+footer .line {
+  width: 100%;
+  height: 1px;
+  background: var(--maroon);
+}
+footer .icon-link a {
+  text-decoration: none;
+  color: var(--maroon);
+  transition: 0.5s;
+}
+footer .icon-link a:hover {
+  color: var(--gold);
+}
+footer .logo-menujutubaba img {
+  height: 40px;
+  width: auto;
+}
+
+@media only screen and (max-width: 768px) {
+  footer {
+    font-size: small;
+  }
+  footer .logo-menujutubaba img {
+    height: 30px;
+    width: auto;
+  }
+}
+@media only screen and (max-width: 600px) {
+  footer {
+    font-size: 7px;
+  }
+  footer .logo-menujutubaba img {
+    height: 15px;
+    width: auto;
+  }
+}
+@media only screen and (max-width: 375px) {
+  footer {
+    font-size: 7px;
+  }
+  footer .logo-menujutubaba img {
+    height: 15px;
+    width: auto;
+  }
+}/*# sourceMappingURL=style.css.map */

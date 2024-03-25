@@ -1,0 +1,66 @@
+footer {
+    font-size: medium;
+    .line {
+        width: 100%;
+        height: 1px;
+        background: var(--maroon);
+    }
+
+    .icon-link {
+        a {
+            text-decoration: none;
+            color: var(--maroon);
+            transition: 0.5s;
+        }
+
+        a:hover {
+            color: var(--gold);
+        }
+    }
+
+    .logo-menujutubaba {
+        img {
+            height: 40px;
+            width: auto;
+        }
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    footer {
+        font-size: small;
+
+        .logo-menujutubaba {
+            img {
+                height: 30px;
+                width: auto;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    footer {
+        font-size: 7px;
+
+        .logo-menujutubaba {
+            img {
+                height: 15px;
+                width: auto;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 375px) {
+    footer {
+        font-size: 7px;
+
+        .logo-menujutubaba {
+            img {
+                height: 15px;
+                width: auto;
+            }
+        }
+    }
+}

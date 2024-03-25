@@ -1,0 +1,22 @@
+@font-face {
+    font-family: tubaba-bold;
+    src: url(../font/tubaba-fonts/Tubaba-Bold.ttf);
+}
+
+@font-face {
+    font-family: tubaba;
+    src: url(../font/tubaba-fonts/Tubaba-Medium.ttf);
+}
+
+:root {
+    --maroon: #680000;
+    --gold: #ead196;
+}
+
+body {
+    font-family: tubaba;
+}
+
+@import "layout/navbar";
+@import "layout/info-dokumen";
+@import "layout/footer";

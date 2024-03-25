@@ -1,0 +1,58 @@
+/* =========== Page Detail Dokumen =========== */
+.page-detail-dokumen {
+    .konten {
+        .card-pdf {
+            background-color: var(--maroon);
+            border-radius: 0px;
+            .cont-pdf {
+                height: 90vh;
+                width: 100%;
+            }
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .btn-unduh {
+            border-radius: 0;
+            background-color: var(--maroon);
+            color: var(--gold);
+            display: flex;
+            justify-content: space-between;
+            transition: all 0.5s;
+
+            i {
+                transition: all 0.5s;
+            }
+        }
+
+        .btn-unduh:hover {
+            background-color: var(--gold);
+            color: var(--maroon);
+
+            i {
+                transform: rotate(-30deg);
+            }
+        }
+
+        .ket {
+            font-size: medium;
+        }
+    }
+}
+
+// @media only screen and (max-width: 768px) {
+//     .page-detail-dokumen {
+//     }
+// }
+
+// @media only screen and (max-width: 600px) {
+//     .page-detail-dokumen {
+//     }
+// }
+
+// @media only screen and (max-width: 375px) {
+//     .page-detail-dokumen {
+//     }
+// }
