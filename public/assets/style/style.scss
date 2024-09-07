@@ -15,8 +15,18 @@
 
 body {
     font-family: tubaba;
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: tubaba-bold;
+    }
 }
 
 @import "layout/navbar";
 @import "layout/info-dokumen";
+@import "layout/dash";
 @import "layout/footer";

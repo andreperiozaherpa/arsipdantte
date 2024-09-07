@@ -1,7 +1,7 @@
 <nav class="navbar">
     <div class="container">
         <a class="navbar-brand">
-            <img src="/assets/logo/logopemda.svg" alt="" />
+            <img src="/assets/logo/arsip.svg" alt="" />
         </a>
 
         <div class="info-docx-text">Informasi Dokumen</div>

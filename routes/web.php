@@ -22,4 +22,5 @@ Route::prefix('get_data')->group(function () {
 Route::prefix('/')->group(function () {
     Route::get('/', [DataController::class, 'create']);
     Route::get('/show', [DataController::class, 'show']);
+    Route::get('/data', [DataController::class, 'data']);
 });

@@ -31,23 +31,27 @@ class DataController extends Controller
 
         $responses_verify = Http::withBody(
             '{
-                "file":"' .  $b64Pdf . '"
+                "file":"' .
+                $b64Pdf .
+                '"
             }',
-            'application/json'
+            'application/json',
         )
             ->withBasicAuth('kominfo', '12345678')
             ->retry(10, 100, throw: false)
             ->post('http://103.175.217.188/api/v2/verify/pdf');
 
         // dd(json_decode($responses_verify->body()));
-        return response()->json([
-            $response->json(),
-            'data_sig' => json_decode($responses_verify->body())
-        ]);
+        return response()->json([$response->json(), 'data_sig' => json_decode($responses_verify->body())]);
     }
 
     public function create()
     {
         return view('verify');
+    }
+
+    public function data()
+    {
+        return view('get_data_verify');
     }
 }

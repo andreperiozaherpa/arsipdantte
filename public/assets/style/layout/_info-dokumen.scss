@@ -4,10 +4,14 @@
         .card-pdf {
             background-color: var(--maroon);
             border-radius: 0px;
-            .cont-pdf {
-                height: 90vh;
+            iframe {
+                min-height: 60vh;
                 width: 100%;
             }
+            // .cont-pdf {
+            //     height: auto;
+            //     width: 100%;
+            // }
         }
 
         a {
