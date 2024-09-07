@@ -40,7 +40,26 @@ class DataController extends Controller
         //
         $index = $request->index;
         $response = Http::get('aplikasi.tubaba.go.id/api/arsip_tte?index=' . $index);
-        return response()->json($response->json());
+        $url_dokumen = json_decode($response->body())->url_dokumen;
+
+        $files_pdf = file_get_contents($url_dokumen);
+        // file_put_contents('sda.pdf', $files_qr);
+        $b64Pdf = base64_encode($files_pdf);
+        $responses_verify = Http::withBody(
+            '{
+                "file":"' .  $b64Pdf . '"
+            }',
+            'application/json'
+        )
+            ->withBasicAuth('kominfo', '12345678')
+            ->retry(10, 100, throw: false)
+            ->post('http://103.175.217.188/api/v2/verify/pdf');
+
+        // dd(json_decode($responses_verify->body()));
+        return response()->json([
+            $response->json(),
+            'data_sig' => json_decode($responses_verify->body())
+        ]);
     }
 
     /**

@@ -26,7 +26,7 @@
     <meta property="og:title" content="aplikasi.tubaba.go.id" />
     <meta name="description" content="Informasi Dokumen Pemerintah Kabupaten Tulang Bawang Barat" />
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 
     <link rel="stylesheet" href=" https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="/assets/css/style.css" />
@@ -55,6 +55,17 @@
     <section class="pt-lg-2 pt-md-2 pt-3">
         <div class="page-detail-dokumen container">
             <div class="konten mt-lg-5 mt-md-4 mt-3">
+                <div class="card border-0">
+                    <div class="card-body">
+                        <h5 class="card-title">Validasi Tanda Tangan Digital</h5>
+                        <div class="accordion accordion-flush" id="accordionFlushExample">
+                            <div class="items_sig">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
                 <div class="row mt-lg-5 col-md-12 col-12 mt-md-4 mt-3 m-0 p-0">
                     <div class="col-lg-5">
                         <div class="card card-pdf p-1">
@@ -154,11 +165,8 @@
     </footer>
 
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
 
     <script>
         // document.addEventListener(
@@ -186,16 +194,83 @@
                     index: index
                 },
                 success: function(response) {
-                    console.log(response);
-                    $("#dokumen").attr("src", response.url_dokumen + '#toolbar=0');
-                    $('#nomorSurat').text(response.nomor_surat);
-                    $('#tglSurat').text(response.tgl_surat);
-                    $('#asalSurat').text(response.organisasi);
-                    $('#perihal').text(response.perihal);
-                    $('#pejabatTTD').text(response.penandatangan);
-                    $('#metodeTTD').text(response.metode_tanda_tangan);
+                    response_verify(response)
+                },
+                error: function(response) {
+
                 }
             });
+
+            function response_verify(res) {
+                // console.log(res[0]);
+                // console.log(res.data_sig.signatureInformations);
+                var i = 1;
+                var text = [];
+                // console.log(res.data_sig.description);
+                var nameMerge;
+
+                $.each(res.data_sig.signatureInformations, function(indexInArray, valueOfElement) {
+                    // console.log(valueOfElement);
+                    var options = {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    };
+                    var tanggalSekarang = new Date(valueOfElement.signatureDate);
+                    var formatLokalID = tanggalSekarang.toLocaleDateString('id-ID', options);
+
+                    $('.items_sig').append(`
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="flush-heading` + i + `">
+                                <button style="background-color:#ead196 ; color:#680000;" class="accordion-button collapsed"
+                                type="button" data-bs-toggle="collapse" data-bs-target="#flush_` + i + `">
+                                    ` + i + `. Tanda - Tangan Oleh ` + valueOfElement.signerName + `
+                                </button>
+                            </h2>
+                            <div id="flush_` + i + `" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                                <div class="accordion-body">
+                                    <table class="table">
+                                        <tbody>
+                                            <tr>
+                                                <td>Validasi</td>
+                                                <td>: ` + res.data_sig.description + `</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Nama</td>
+                                                <td>: ` + valueOfElement.signerName + `</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Lokasi</td>
+                                                <td>: ` + valueOfElement.location + `</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Alasan</td>
+                                                <td>: ` + valueOfElement.reason + `</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Waktu Tanda - Tangan Elektronik</td>
+                                                <td>: ` + formatLokalID + `</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    `);
+                    nameMerge = text.push(i + '. ' + valueOfElement.signerName + '<br>')
+                    i++;
+                    // text = valueOfElement.signerName;
+                });
+                console.log(nameMerge);
+                $("#dokumen").attr("src", res[0].url_dokumen + '#toolbar=0');
+                $('#nomorSurat').text(res[0].nomor_surat);
+                $('#tglSurat').text(res[0].tgl_surat);
+                $('#asalSurat').text(res[0].organisasi);
+                $('#perihal').text(res[0].perihal);
+                $('#pejabatTTD').html(text);
+                $('#metodeTTD').text(res[0].metode_tanda_tangan);
+            }
         });
     </script>
 </body>
