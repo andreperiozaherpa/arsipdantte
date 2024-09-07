@@ -18,3 +18,8 @@ Route::prefix('get_data')->group(function () {
     Route::get('/', [DataController::class, 'index']);
     Route::get('/show', [DataController::class, 'show']);
 });
+
+Route::prefix('/')->group(function () {
+    Route::get('/', [DataController::class, 'create']);
+    Route::get('/show', [DataController::class, 'show']);
+});
