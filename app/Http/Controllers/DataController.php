@@ -42,9 +42,9 @@ class DataController extends Controller
         $response = Http::get('aplikasi.tubaba.go.id/api/arsip_tte?index=' . $index);
         $url_dokumen = json_decode($response->body())->url_dokumen;
 
-        $files_pdf = file_get_contents($url_dokumen);
-        // file_put_contents('sda.pdf', $files_qr);
+        $files_pdf = @file_get_contents($url_dokumen);
         $b64Pdf = base64_encode($files_pdf);
+
         $responses_verify = Http::withBody(
             '{
                 "file":"' .  $b64Pdf . '"
