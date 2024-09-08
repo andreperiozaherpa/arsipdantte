@@ -11,7 +11,8 @@
                         <p class="mt-md-4 mt-3">Pemerintah Kabupaten Tulang Bawang Barat bekerjasama dengan Badan Siber dan
                             Sandi
                             Negara (BSSN)
-                            mengimplemtasikan penerapan tanda tangan digital di lingukungan kerja Pemerintah.</p>
+                            mengimplemtasikan penerapan tanda tangan digital di lingukungan kerja Pemerintah Kabupaten
+                            Tulang Bawanag Barat.</p>
                         <p>Didukung oleh :</p>
                         <div class="d-flex logo">
                             <img class="img-fluid p-md-2 p-1" src="/assets/logo/logopemda.svg" alt="">
