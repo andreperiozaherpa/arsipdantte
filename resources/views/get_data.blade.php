@@ -63,20 +63,41 @@
                     </div>
 
                     <!-- <div class="d-flex mt-lg-4">
-                    <div class="flex-grow-1">
-                      <a href="#">
-                        <button type="button" class="btn btn-unduh ps-lg-4 pe-lg-4">
-                          Download File
-                          <i class="bi bi-arrow-right ms-3"></i>
-                        </button>
-                      </a>
-                    </div>
-                  </div> -->
+                                                                                                                                                                                                                                                                                        <div class="flex-grow-1">
+                                                                                                                                                                                                                                                                                          <a href="#">
+                                                                                                                                                                                                                                                                                            <button type="button" class="btn btn-unduh ps-lg-4 pe-lg-4">
+                                                                                                                                                                                                                                                                                              Download File
+                                                                                                                                                                                                                                                                                              <i class="bi bi-arrow-right ms-3"></i>
+                                                                                                                                                                                                                                                                                            </button>
+                                                                                                                                                                                                                                                                                          </a>
+                                                                                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                                                                                      </div> -->
                     <!-- </div> -->
                 </div>
             </div>
         </div>
     </section>
+
+    <div class="modal fade" id="modalFull">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content bg-transparent">
+                <div class="modal-body p-0 m-0">
+                    <div class="row p-0 m-0 align-items-center vh-100">
+                        <div class="col-12 d-flex justify-content-center">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- <div class="align-items-center">
+                        <div class="spinner-border text-dark" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div> --}}
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @push('script')
     <script>
@@ -96,11 +117,20 @@
                 data: {
                     index: index
                 },
+                beforeSend: function() {
+                    $('#modalFull').modal('show')
+                },
                 success: function(response) {
                     response_verify(response)
+                    $('#modalFull').modal('hide')
                 },
                 error: function(response) {
-
+                    $('#modalFull').modal('hide')
+                    Swal.fire({
+                        title: "error",
+                        text: "Data Yang Dicari Tidak Ada",
+                        icon: "error"
+                    });
                 }
             });
 
