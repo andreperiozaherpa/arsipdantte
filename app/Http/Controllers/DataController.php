@@ -41,11 +41,11 @@ class DataController extends Controller
                 ->retry(10, 100, throw: false)
                 ->post('http://10.90.160.6/api/v2/verify/pdf');
 
+            unlink($path . '/' . $name);
             return response()->json([
                 'name' => $name,
                 'data' => json_decode($responses_verify->body())
             ]);
-        } else {
         }
     }
 

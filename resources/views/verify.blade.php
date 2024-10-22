@@ -114,9 +114,6 @@
 @endsection
 @push('script')
     <script>
-        $(document).ready(function() {
-            $('#modalVerify').modal('show')
-        });
         Dropzone.options.myFile = {
             // Configuration options go here
             headers: {
@@ -133,9 +130,8 @@
                 this.on('success', function(file, responseText) {
                     $('.dz-filename span').text(responseText.name)
                     $('#modalVerify').modal('show')
-                    // console.log(responseText.data.signatureInformations);
+
                     $.each(responseText.data.signatureInformations, function(index, value) {
-                        // console.log(value.signerName);
                         $('#validName').append('<li>' + value.signerName + '</li>')
                     });
 
@@ -147,29 +143,6 @@
                 });
             },
         };
-
-        $('#buttonVerify').click(function(e) {
-            e.preventDefault();
-            $('#modalVerify').modal('show')
-            // console.log($('.drop-zone__thumb').data('label'));
-
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            $.ajax({
-                type: "post",
-                url: "/verify",
-                data: {
-                    file: $('.drop-zone__thumb').data('label')
-                },
-                success: function(response) {
-
-                }
-            });
-        });
 
 
         // arif
