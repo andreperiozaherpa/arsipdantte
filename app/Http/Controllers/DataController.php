@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
 
 class DataController extends Controller
@@ -14,6 +15,38 @@ class DataController extends Controller
     {
         //
         return view('get_data');
+    }
+
+    public function verify(Request $request)
+    {
+        $files = $request->file;
+        $param = $request->param;
+        if ($param == 'uploads') {
+            $path = storage_path('/app/public/dokumen');
+            $name = Str::random(5) . '.' .  $files->getClientOriginalExtension();
+            $files->move($path, $name);
+
+            $files_pdf = @file_get_contents($path . '/' . $name);
+            $b64Pdf = base64_encode($files_pdf);
+
+            $responses_verify = Http::withBody(
+                '{
+                    "file":"' .
+                    $b64Pdf .
+                    '"
+                }',
+                'application/json',
+            )
+                ->withBasicAuth('kominfo', '12345678')
+                ->retry(10, 100, throw: false)
+                ->post('http://10.90.160.6/api/v2/verify/pdf');
+
+            return response()->json([
+                'name' => $name,
+                'data' => json_decode($responses_verify->body())
+            ]);
+        } else {
+        }
     }
 
     /**

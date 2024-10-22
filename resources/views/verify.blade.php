@@ -28,21 +28,20 @@
                             <div class="row d-flex justify-content-center mt-md-2 mt-3">
                                 <div class="col-auto">
                                     <div class="mt-md-4 drop">
-                                        <div class="drop-zone">
+                                        {{-- <div class="drop-zone">
                                             <span class="drop-zone__prompt">Drop file here or click to upload</span>
-                                            <input type="file" name="myFile" class="drop-zone__input">
-                                        </div>
+                                            <input accept="application/pdf" name="myFile" id="myFile" class="drop-zone__input">
+                                        </div> --}}
+                                        <form class="dropzone" id="myFile"></form>
                                     </div>
 
                                     {{-- button cek file --}}
-                                    <div class="but d-flex justify-content-center mt-md-4 mt-3">
-                                        <a href="">
-                                            <button type="button" class="btn btn-sm btn-atas ps-lg-4 pe-lg-4">
-                                                Cek dokumen
-                                                <i class="bi bi-arrow-right ms-3"></i>
-                                            </button>
-                                        </a>
-                                    </div>
+                                    {{-- <div class="but d-flex justify-content-center mt-md-4 mt-3">
+                                        <button style="background-color: #680000;color:white;" id="buttonVerify" type="button" class="btn btn-sm btn-atas ps-lg-4 pe-lg-4">
+                                            Cek dokumen
+                                            <i class="bi bi-arrow-right ms-3"></i>
+                                        </button>
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>
@@ -72,79 +71,178 @@
             </div>
         </div>
     </section>
+
+    <div class="modal fade" tabindex="-1" id="modalVerify">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Dokumen Verifikasi</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="modalBox">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td>Status</td>
+                                    <td></td>
+                                    <td id="validStatus"></td>
+                                </tr>
+                                <tr>
+                                    <td>Deskripsi</td>
+                                    <td></td>
+                                    <td id="validDeskripsi"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">TTE</th>
+                                    <td></td>
+                                    <td>
+                                        <ul id="validName">
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @push('script')
     <script>
-        document.querySelectorAll(".drop-zone__input").forEach((inputElement) => {
-            const dropZoneElement = inputElement.closest(".drop-zone");
-
-            dropZoneElement.addEventListener("click", (e) => {
-                inputElement.click();
-            });
-
-            inputElement.addEventListener("change", (e) => {
-                if (inputElement.files.length) {
-                    updateThumbnail(dropZoneElement, inputElement.files[0]);
-                }
-            });
-
-            dropZoneElement.addEventListener("dragover", (e) => {
-                e.preventDefault();
-                dropZoneElement.classList.add("drop-zone--over");
-            });
-
-            ["dragleave", "dragend"].forEach((type) => {
-                dropZoneElement.addEventListener(type, (e) => {
-                    dropZoneElement.classList.remove("drop-zone--over");
+        $(document).ready(function() {
+            $('#modalVerify').modal('show')
+        });
+        Dropzone.options.myFile = {
+            // Configuration options go here
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: "/verify",
+            acceptedFiles: 'application/pdf',
+            maxFiles: 1,
+            init: function() {
+                this.on("sending", function(file, xhr, formData) {
+                    formData.append("param", "uploads");
                 });
+
+                this.on('success', function(file, responseText) {
+                    $('.dz-filename span').text(responseText.name)
+                    $('#modalVerify').modal('show')
+                    // console.log(responseText.data.signatureInformations);
+                    $.each(responseText.data.signatureInformations, function(index, value) {
+                        // console.log(value.signerName);
+                        $('#validName').append('<li>' + value.signerName + '</li>')
+                    });
+
+                    $('#validStatus').text(responseText.data.conclusion)
+                    $('#validDeskripsi').text(responseText.data.description)
+                });
+                this.on('resetFiles', function() {
+                    this.removeAllFiles();
+                });
+            },
+        };
+
+        $('#buttonVerify').click(function(e) {
+            e.preventDefault();
+            $('#modalVerify').modal('show')
+            // console.log($('.drop-zone__thumb').data('label'));
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
             });
 
-            dropZoneElement.addEventListener("drop", (e) => {
-                e.preventDefault();
+            $.ajax({
+                type: "post",
+                url: "/verify",
+                data: {
+                    file: $('.drop-zone__thumb').data('label')
+                },
+                success: function(response) {
 
-                if (e.dataTransfer.files.length) {
-                    inputElement.files = e.dataTransfer.files;
-                    updateThumbnail(dropZoneElement, e.dataTransfer.files[0]);
                 }
-
-                dropZoneElement.classList.remove("drop-zone--over");
             });
         });
 
-        /**
-         * Updates the thumbnail on a drop zone element.
-         *
-         * @param {HTMLElement} dropZoneElement
-         * @param {File} file
-         */
-        function updateThumbnail(dropZoneElement, file) {
-            let thumbnailElement = dropZoneElement.querySelector(".drop-zone__thumb");
 
-            // First time - remove the prompt
-            if (dropZoneElement.querySelector(".drop-zone__prompt")) {
-                dropZoneElement.querySelector(".drop-zone__prompt").remove();
-            }
+        // arif
+        // document.querySelectorAll(".drop-zone__input").forEach((inputElement) => {
+        //     const dropZoneElement = inputElement.closest(".drop-zone");
 
-            // First time - there is no thumbnail element, so lets create it
-            if (!thumbnailElement) {
-                thumbnailElement = document.createElement("div");
-                thumbnailElement.classList.add("drop-zone__thumb");
-                dropZoneElement.appendChild(thumbnailElement);
-            }
+        //     dropZoneElement.addEventListener("click", (e) => {
+        //         inputElement.click();
+        //     });
 
-            thumbnailElement.dataset.label = file.name;
+        //     dropZoneElement.addEventListener("change", (e) => {
+        //         if (inputElement.files.length) {
+        //             updateThumbnail(dropZoneElement, inputElement.files[0]);
+        //         }
+        //     });
 
-            // Show thumbnail for image files
-            if (file.type.startsWith("image/")) {
-                const reader = new FileReader();
+        //     dropZoneElement.addEventListener("dragover", (e) => {
+        //         e.preventDefault();
+        //         dropZoneElement.classList.add("drop-zone--over");
+        //     });
 
-                reader.readAsDataURL(file);
-                reader.onload = () => {
-                    thumbnailElement.style.backgroundImage = `url('${reader.result}')`;
-                };
-            } else {
-                thumbnailElement.style.backgroundImage = null;
-            }
-        }
+        //     ["dragleave", "dragend"].forEach((type) => {
+        //         dropZoneElement.addEventListener(type, (e) => {
+        //             dropZoneElement.classList.remove("drop-zone--over");
+        //         });
+        //     });
+
+        //     dropZoneElement.addEventListener("drop", (e) => {
+        //         e.preventDefault();
+
+        //         if (e.dataTransfer.files.length) {
+        //             inputElement.files = e.dataTransfer.files;
+        //             updateThumbnail(dropZoneElement, e.dataTransfer.files[0]);
+        //         }
+
+        //         dropZoneElement.classList.remove("drop-zone--over");
+        //     });
+        // });
+
+        // /**
+        //  * Updates the thumbnail on a drop zone element.
+        //  *
+        //  * @param {HTMLElement} dropZoneElement
+        //  * @param {File} file
+        //  */
+        // function updateThumbnail(dropZoneElement, file) {
+        //     let thumbnailElement = dropZoneElement.querySelector(".drop-zone__thumb");
+
+        //     // First time - remove the prompt
+        //     if (dropZoneElement.querySelector(".drop-zone__prompt")) {
+        //         dropZoneElement.querySelector(".drop-zone__prompt").remove();
+        //     }
+
+        //     // First time - there is no thumbnail element, so lets create it
+        //     if (!thumbnailElement) {
+        //         thumbnailElement = document.createElement("div");
+        //         thumbnailElement.classList.add("drop-zone__thumb");
+        //         dropZoneElement.appendChild(thumbnailElement);
+        //     }
+
+        //     thumbnailElement.dataset.label = file.name;
+
+        //     // Show thumbnail for image files
+        //     if (file.type.startsWith("image/")) {
+        //         const reader = new FileReader();
+
+        //         reader.readAsDataURL(file);
+        //         reader.onload = () => {
+        //             thumbnailElement.style.backgroundImage = `url('${reader.result}')`;
+        //         };
+        //     } else {
+        //         thumbnailElement.style.backgroundImage = null;
+        //     }
+        // }
     </script>
 @endpush
