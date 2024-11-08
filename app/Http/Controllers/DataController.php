@@ -72,7 +72,7 @@ class DataController extends Controller
         )
             ->withBasicAuth('kominfo', '12345678')
             ->retry(10, 100, throw: false)
-            ->post('http://103.175.217.188/api/v2/verify/pdf');
+            ->post('http://10.90.160.6/api/v2/verify/pdf');
 
         // dd(json_decode($responses_verify->body()));
         return response()->json([$response->json(), 'data_sig' => json_decode($responses_verify->body())]);
